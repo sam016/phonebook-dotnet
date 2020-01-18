@@ -4,5 +4,15 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="8.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sam016.Phonebook.Domain\Sam016.Phonebook.Domain.csproj" />
+    <ProjectReference Include="..\Sam016.Phonebook.Infrastructure\Sam016.Phonebook.Infrastructure.csproj" />
+  </ItemGroup>
+
 
 </Project>

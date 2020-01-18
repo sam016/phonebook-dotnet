@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Sam016.Phonebook.API.Extensions;
 
 namespace Sam016.Phonebook.API
 {
@@ -26,6 +27,7 @@ namespace Sam016.Phonebook.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.ConfigureMediatR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
