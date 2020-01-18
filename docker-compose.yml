@@ -1,0 +1,42 @@
+version: "3.3"
+services:
+  server:
+    build:
+      dockerfile: ./Dockerfile
+      context: ./src
+    volumes:
+      - ./src:/app
+    ports:
+      - 5000:5000
+      - 5001:5001
+    links:
+      - db
+      - adminer
+    stdin_open: true
+    tty: true
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 6001:8025
+  adminer:
+    image: adminer
+    links:
+      - db
+    ports:
+      - 6002:8080
+  db:
+    image: mysql:8.0.15
+    command:
+      [
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--default-authentication-plugin=mysql_native_password",
+        "--sql_mode=",
+      ]
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: sam016-phonebook
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+      MYSQL_ROOT_PASSWORD: root-password
