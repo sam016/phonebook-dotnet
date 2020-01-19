@@ -92,7 +92,14 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
 
         public async Task UpdateAsync(TModel model)
         {
-            var existing = await DbContext.Set<TModel>()
+            var local = DbModelContext.Local.FirstOrDefault(entry => entry.Id.Equals(model.Id));
+
+            if (local != null)
+            {
+                DbContext.Entry(local).State = EntityState.Detached;
+            }
+
+            var existing = await DbModelContext
                         .FirstOrDefaultAsync(entry => entry.Id.Equals(model.Id));
 
             if (existing == null)
