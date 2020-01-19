@@ -1,6 +1,6 @@
 namespace Sam016.Phonebook.API.Models.Commands.PhoneEntry
 {
-    public class CreatePhoneEntryCommand : MediatR.IRequest<Sam016.Phonebook.Domain.Models.PhoneEntry>
+    public class CreatePhoneEntryCommand : BaseCommand, MediatR.IRequest<Sam016.Phonebook.Domain.Models.PhoneEntry>
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

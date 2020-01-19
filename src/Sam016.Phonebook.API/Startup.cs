@@ -1,3 +1,4 @@
+using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,9 +32,12 @@ namespace Sam016.Phonebook.API
         {
             services.AddControllers();
             services.ConfigureMediatR();
+            services.ConfigureSwagger();
+            services.ConfigureRepositories();
+            services.AddAutoMapper(typeof(Startup), typeof(Domain.Models.BaseModel));
 
-            services.AddDbContextPool<PhonebookContext>(options => options
-                .UseMySql("server=db;database=sam016-phonebook;user=user;password=password", x => x.ServerVersion("8.0.15-mysql"))
+            services.AddDbContext<DbContext, PhonebookContext>(options => options
+                .UseMySql("server=db;database=sam016-phonebook;user=user;password=password;Convert Zero Datetime=True;", x => x.ServerVersion("8.0.15-mysql"))
             );
         }
 
@@ -45,7 +49,11 @@ namespace Sam016.Phonebook.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseStopwatchMiddleware();
+
             app.UseHttpsRedirection();
+
+            app.InjectSwagger();
 
             app.UseRouting();
 

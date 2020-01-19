@@ -14,14 +14,14 @@
                 "pipeArgs": [
                     "exec",
                     "-T",
-                    "Sam016.Phonebook.API"
+                    "server"
                 ],
                 "debuggerPath": "/vsdbg/vsdbg",
                 "pipeCwd": "${workspaceRoot}",
                 "quoteArgs": false
             },
             "sourceFileMap": {
-                "/app": "${workspaceRoot}/src/Sam016.Phonebook.API"
+                "/app": "${workspaceRoot}/src"
             }
         },
         {
