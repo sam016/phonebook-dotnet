@@ -15,6 +15,8 @@ namespace Sam016.Phonebook.API.Profiles
             CreateMap<LoginRequest, LoginCommand>();
             CreateMap<object, WhoamiQuery>();
             CreateMap<AuthToken, AuthTokenDto>();
+            CreateMap<Domain.Models.AuthProfile, AuthProfileDto>()
+                .ForMember(dest => dest.UserId, conf => conf.MapFrom(src => src.Id));
         }
     }
 }

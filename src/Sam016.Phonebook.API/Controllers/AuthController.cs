@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sam016.Phonebook.API.Models.Commands.Auth;
@@ -47,7 +48,7 @@ namespace Sam016.Phonebook.API.Controllers
         }
 
         /// <summary>
-        /// Logs out the user
+        /// Logs out the user (TODO)
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Success if user id logged out</response>
@@ -67,7 +68,7 @@ namespace Sam016.Phonebook.API.Controllers
         }
 
         /// <summary>
-        /// Refreshes the token
+        /// Refreshes the token (TODO)
         /// </summary>
         /// <returns></returns>
         /// <response code="200">Renewed jwt auth token</response>
@@ -95,6 +96,7 @@ namespace Sam016.Phonebook.API.Controllers
         /// <returns></returns>
         /// <response code="200">Logged in user profile</response>
         /// <response code="401">Invalid authorization</response>
+        [Authorize]
         [HttpPost("whoami")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

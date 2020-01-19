@@ -4,6 +4,14 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Sam016.Phonebook.Infrastructure.Repositories;
 using System.Collections.Generic;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
+using System.IO;
+using System.Linq;
 
 namespace Sam016.Phonebook.API.Extensions
 {
@@ -19,6 +27,30 @@ namespace Sam016.Phonebook.API.Extensions
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IPhoneEntryRepository, PhoneEntryRepository>();
             services.AddScoped<IPhonebookRepository, PhonebookRepository>();
+        }
+        public static void AddAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
+            var secretKey = Encoding.ASCII.GetBytes(configuration.GetValue<string>("Auth:Secret"));
+
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                };
+            });
         }
 
         public static void ConfigureSwagger(this IServiceCollection services)
@@ -74,6 +106,17 @@ namespace Sam016.Phonebook.API.Extensions
                     Type = SecuritySchemeType.ApiKey,
                     Scheme = "Bearer"
                 });
+
+                // ** Set the comments path for the Swagger JSON and UI.**
+                // var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                // var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                // c.IncludeXmlComments(xmlPath);
+                var dir = new DirectoryInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory));
+                var files = dir.EnumerateFiles("*.xml").ToList();
+                foreach (var fi in files)
+                {
+                    c.IncludeXmlComments(fi.FullName);
+                }
             });
         }
     }

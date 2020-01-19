@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Sam016.Phonebook.API.Extensions;
 using Sam016.Phonebook.Infrastructure;
 using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Microsoft.AspNetCore.Http;
 
 namespace Sam016.Phonebook.API
 {
@@ -36,6 +37,7 @@ namespace Sam016.Phonebook.API
             services.ConfigureMediatR();
             services.ConfigureSwagger();
             services.ConfigureRepositories();
+            services.AddAuthentication(Configuration);
             services.AddAutoMapper(typeof(Startup), typeof(Domain.Models.BaseModel));
 
             services.AddDbContext<DbContext, PhonebookContext>(options =>
@@ -60,8 +62,9 @@ namespace Sam016.Phonebook.API
                     options.UseInMemoryDatabase("DB-" + random.Next());
                     options.EnableSensitiveDataLogging(true);
                 }
-            }
-            );
+            });
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -80,6 +83,7 @@ namespace Sam016.Phonebook.API
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

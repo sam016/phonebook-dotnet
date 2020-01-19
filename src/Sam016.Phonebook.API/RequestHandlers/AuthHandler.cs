@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Sam016.Phonebook.API.Models.Commands.Auth;
@@ -23,11 +24,13 @@ namespace Sam016.Phonebook.API.RequestHandlers
     {
         private readonly IUserRepository UserRepository;
         private readonly IConfiguration Configuration;
+        private readonly IHttpContextAccessor HttpContextAccessor;
 
-        public AuthHandler(IUserRepository userRepository, IConfiguration configuration)
+        public AuthHandler(IUserRepository userRepository, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             UserRepository = userRepository;
             Configuration = configuration;
+            HttpContextAccessor = httpContextAccessor;
         }
 
         public async Task<AuthToken> Handle(LoginCommand request, CancellationToken cancellationToken)
@@ -43,7 +46,7 @@ namespace Sam016.Phonebook.API.RequestHandlers
             // authentication successful so generate jwt token
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("Auth:Secret"));
-            var tokenExpiresAt = DateTime.UtcNow.AddDays(Configuration.GetValue<int>("Auth:ExpirationInSecs"));
+            var tokenExpiresAt = DateTime.UtcNow.AddSeconds(Configuration.GetValue<int>("Auth:ExpirationInSecs"));
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new Claim[]
@@ -78,7 +81,13 @@ namespace Sam016.Phonebook.API.RequestHandlers
 
         public Task<AuthProfile> Handle(WhoamiQuery request, CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.FromResult(new AuthProfile()
+            {
+                Id = int.Parse(HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value),
+                FirstName = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.GivenName).Value,
+                LastName = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Surname).Value,
+                Email = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value,
+            });
         }
     }
 }

@@ -1,7 +1,7 @@
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 using Sam016.Phonebook.API.Models.Queries.User;
 using Sam016.Phonebook.API.Models.Requests.User;
+using Sam016.Phonebook.Domain.Dtos;
+using Sam016.Phonebook.Domain.Models;
 
 namespace Sam016.Phonebook.API.Profiles
 {
@@ -12,6 +12,8 @@ namespace Sam016.Phonebook.API.Profiles
             CreateMap<GetAllUsersRequest, GetAllUsersQuery>();
             CreateMap<int, GetUserByIdQuery>()
                 .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src));
+
+            CreateMap<User, UserDto>();
         }
     }
 }

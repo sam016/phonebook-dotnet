@@ -6,6 +6,8 @@ namespace Sam016.Phonebook.Domain.Dtos
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
-        public string Password { get; set; }
+
+        // **DO NOT** show the password to the user
+        // public string Password { get; set; }
     }
 }
