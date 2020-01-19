@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
 {
-    public class UserRepositoryTest : BaseRepositoryTest<User, UserRepository>, IClassFixture<DatabaseFixture>
+    public class UserRepositoryTest : BaseRepositoryTest<User, UserRepository>
     {
-        public UserRepositoryTest(DatabaseFixture fixture) : base(fixture)
+        public UserRepositoryTest() : base()
         {
         }
 
@@ -22,17 +22,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData("first-10", "last-10", "a10@test.com", "password")]
         public async Task TestGenericCreateAsync(string firstName, string lastName, string email, string password)
         {
-            // var repo = await NewRepositoryAsync();
-
-            // var user = await repo.CreateAsync(new User()
-            // {
-            //     FirstName = firstName,
-            //     LastName = lastName,
-            //     Email = email,
-            //     Password = password,
-            // });
-
-            await ExecuteInRepositoryAsync(async (UserRepository repo) =>
+            await ExecuteInRepositoryAsync(async (DbContext context, UserRepository repo) =>
             {
                 var user = await repo.CreateAsync(new User()
                 {
@@ -44,14 +34,12 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
 
                 user.Id.Should().NotBe(0);
             });
-
-            // user.Id.Should().Be(1);
         }
 
         [Fact]
         public async Task TestGenericGetAllAsync()
         {
-            await ExecuteInRepositoryAsync(async (UserRepository repo) =>
+            await ExecuteInRepositoryAsync(async (DbContext context, UserRepository repo) =>
             {
                 var users = await repo.GetAllAsync();
 
@@ -63,18 +51,6 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
                     new User{Id=5, FirstName="first-5", LastName= "last-5", Email="a5@test.com", Password = "password"},
                 });
             });
-
-            // var repo = await NewRepositoryAsync();
-
-            // var users = await repo.GetAllAsync();
-
-            // users.Should().BeEquivalentTo(new User[]{
-            //     new User{Id=1, FirstName="first-1", LastName= "last-1", Email="a1@test.com", Password = "password"},
-            //     new User{Id=2, FirstName="first-2", LastName= "last-2", Email="a2@test.com", Password = "password"},
-            //     new User{Id=3, FirstName="first-3", LastName= "last-3", Email="a3@test.com", Password = "password"},
-            //     new User{Id=4, FirstName="first-4", LastName= "last-4", Email="a4@test.com", Password = "password"},
-            //     new User{Id=5, FirstName="first-5", LastName= "last-5", Email="a5@test.com", Password = "password"},
-            // });
         }
 
         [Theory]
@@ -85,8 +61,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData(5, "first-5", "last-5", "a5@test.com", "password")]
         public async Task TestGenericGetByIdAsync(int id, string firstName, string lastName, string email, string password)
         {
-
-            await ExecuteInRepositoryAsync(async (UserRepository repo) =>
+            await ExecuteInRepositoryAsync(async (DbContext context, UserRepository repo) =>
             {
                 var user = await repo.GetByIdAsync(id);
 
@@ -95,43 +70,61 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
                 user.Email.Should().Be(email);
                 user.Password.Should().Be(password);
             });
-
-            // var repo = await NewRepositoryAsync();
-
-            // var user = await repo.GetByIdAsync(id);
-
-            // user.FirstName.Should().Be(firstName);
-            // user.LastName.Should().Be(lastName);
-            // user.Email.Should().Be(email);
-            // user.Password.Should().Be(password);
         }
 
-        protected override async Task AddTestDataAsync(DbContext context)
+        [Theory]
+        [InlineData(1, "new-first-1", "new-last-1", "new-a1@test.com", "new-password")]
+        [InlineData(2, "new-first-2", "new-last-2", "new-a2@test.com", "new-password")]
+        [InlineData(3, "new-first-3", "new-last-3", "new-a3@test.com", "new-password")]
+        [InlineData(4, "new-first-4", "new-last-4", "new-a4@test.com", "new-password")]
+        [InlineData(5, "new-first-5", "new-last-5", "new-a5@test.com", "new-password")]
+        public async Task TestGenericUpdateAsync(int id, string firstName, string lastName, string email, string password)
         {
-            await context.AddRangeAsync(new User[]{
-                new User{Id=1, FirstName="first-1", LastName= "last-1", Email="a1@test.com", Password = "password"},
-                new User{Id=2, FirstName="first-2", LastName= "last-2", Email="a2@test.com", Password = "password"},
-                new User{Id=3, FirstName="first-3", LastName= "last-3", Email="a3@test.com", Password = "password"},
-                new User{Id=4, FirstName="first-4", LastName= "last-4", Email="a4@test.com", Password = "password"},
-                new User{Id=5, FirstName="first-5", LastName= "last-5", Email="a5@test.com", Password = "password"},
+            await ExecuteInRepositoryAsync(async (DbContext context, UserRepository repo) =>
+            {
+                await repo.UpdateAsync(new User()
+                {
+                    Id = id,
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    Password = password,
+                });
+
+                var updatedUser = await context.Set<User>().FindAsync(id);
+
+                updatedUser.FirstName.Should().Be(firstName);
+                updatedUser.LastName.Should().Be(lastName);
+                updatedUser.Email.Should().Be(email);
+                updatedUser.Password.Should().Be(password);
             });
-            await context.SaveChangesAsync();
         }
 
-        protected override async Task<UserRepository> NewRepositoryAsync()
+        [Theory]
+        // [InlineData(1)] // Commented as its a foreign key to some phonebooks
+        [InlineData(2)]
+        [InlineData(3)]
+        [InlineData(4)]
+        [InlineData(5)]
+        public async Task TestGenericDeleteByIdAsync(int id)
         {
-            var context = NewContext();
-            await AddTestDataAsync(context);
-            return new UserRepository(Fixture.DbContext);
+            await ExecuteInRepositoryAsync(async (DbContext context, UserRepository repo) =>
+            {
+                await repo.DeleteAsync(id);
+
+                var user = await context.Set<User>().FindAsync(id);
+
+                user.Should().BeNull();
+            });
         }
 
-        private async Task ExecuteInRepositoryAsync(Func<UserRepository, Task> func)
+        protected override async Task ExecuteInRepositoryAsync(Func<DbContext, UserRepository, Task> func)
         {
-            using (var context = NewContext())
+            using (var context = NewDbContext())
             {
                 await AddTestDataAsync(context);
-                var repo = new UserRepository(Fixture.DbContext);
-                await func(repo);
+                var repo = new UserRepository(context);
+                await func(context, repo);
             }
         }
     }

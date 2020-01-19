@@ -16,5 +16,13 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
         public UserRepository(DbContext context) : base(context)
         {
         }
+
+        public override void CopyData(RepoUserModel fromEntity, RepoUserModel toEntity)
+        {
+            toEntity.FirstName = fromEntity.FirstName;
+            toEntity.LastName = fromEntity.LastName;
+            toEntity.Email = fromEntity.Email;
+            toEntity.Password = fromEntity.Password;
+        }
     }
 }

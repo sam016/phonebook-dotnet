@@ -65,7 +65,7 @@ namespace Sam016.Phonebook.Infrastructure
                 entity.HasOne(d => d.User)
                     .WithMany(p => p.Phonebook)
                     .HasForeignKey(d => d.UserId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("phone_book_ibfk_1");
             });
 
@@ -139,7 +139,7 @@ namespace Sam016.Phonebook.Infrastructure
                 entity.HasOne(d => d.Phonebook)
                     .WithMany(p => p.PhoneEntry)
                     .HasForeignKey(d => d.PhonebookId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .HasConstraintName("phone_entry_ibfk_1");
             });
 

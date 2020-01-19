@@ -15,6 +15,7 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
         Task<TModel> GetByIdAsync(int id);
         Task DeleteAsync(TModel model);
         Task DeleteAsync(int id);
+        void CopyData(TModel fromEntity, TModel toEntity);
     }
 
     public abstract class BaseRepository<TModel> : IBaseRepository<TModel> where TModel : Sam016.Phonebook.Domain.Models.BaseModel, new()
@@ -27,6 +28,8 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
             this.DbContext = context ?? throw new ArgumentNullException(nameof(context)); ;
             this.DbModelContext = context.Set<TModel>();
         }
+
+        public abstract void CopyData(TModel oldEntity, TModel newEntity);
 
         public async Task<TModel> CreateAsync(TModel model)
         {
@@ -51,7 +54,21 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var result = DbModelContext.Remove(new TModel { Id = id });
+            var local = DbContext.Set<TModel>()
+                        .Local
+                        .FirstOrDefault(entry => entry.Id.Equals(id));
+
+            // check if local is not null
+            if (local != null)
+            {
+                // deleted in state
+                DbContext.Entry(local).State = EntityState.Deleted;
+            }
+            else
+            {
+                DbModelContext.Remove(new TModel { Id = id });
+            }
+
             await DbContext.SaveChangesAsync();
         }
 
@@ -75,7 +92,19 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
 
         public async Task UpdateAsync(TModel model)
         {
-            var result = DbModelContext.Update(model);
+            var existing = await DbContext.Set<TModel>()
+                        .FirstOrDefaultAsync(entry => entry.Id.Equals(model.Id));
+
+            if (existing == null)
+            {
+                throw new Exception("Entity not found");
+            }
+
+            CopyData(model, existing);
+
+            DbContext.Update(existing);
+
+            // save
             await DbContext.SaveChangesAsync();
         }
     }
