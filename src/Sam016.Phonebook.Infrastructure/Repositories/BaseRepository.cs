@@ -1,48 +1,82 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Linq;
 
 namespace Sam016.Phonebook.Infrastructure.Repositories
 {
-    public interface IBaseRepository<TModel> where TModel : Sam016.Phonebook.Domain.Models.BaseModel
+    public interface IBaseRepository<TModel> where TModel : Sam016.Phonebook.Domain.Models.BaseModel, new()
     {
-        Task CreateAsync(TModel model);
+        Task<TModel> CreateAsync(TModel model);
         Task UpdateAsync(TModel model);
         Task<IEnumerable<TModel>> GetAllAsync();
-        Task<TModel> GetByIdAsync();
+        Task<IEnumerable<TModel>> GetAllAsync(System.Linq.Expressions.Expression<Func<TModel, bool>> expression);
+        Task<TModel> GetByIdAsync(int id);
         Task DeleteAsync(TModel model);
         Task DeleteAsync(int id);
     }
 
-    public class BaseRepository<TModel> : IBaseRepository<TModel> where TModel : Sam016.Phonebook.Domain.Models.BaseModel
+    public abstract class BaseRepository<TModel> : IBaseRepository<TModel> where TModel : Sam016.Phonebook.Domain.Models.BaseModel, new()
     {
-        public Task CreateAsync(TModel model)
+        protected readonly DbContext DbContext;
+        protected readonly DbSet<TModel> DbModelContext;
+
+        public BaseRepository(DbContext context)
         {
-            throw new System.NotImplementedException();
+            this.DbContext = context ?? throw new ArgumentNullException(nameof(context)); ;
+            this.DbModelContext = context.Set<TModel>();
         }
 
-        public Task DeleteAsync(TModel model)
+        public async Task<TModel> CreateAsync(TModel model)
         {
-            throw new System.NotImplementedException();
+            try
+            {
+                var result = await DbModelContext.AddAsync(model);
+                await DbContext.SaveChangesAsync();
+                return result.Entity;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                throw;
+            }
         }
 
-        public Task DeleteAsync(int id)
+        public async Task DeleteAsync(TModel model)
         {
-            throw new System.NotImplementedException();
+            var result = DbModelContext.Remove(model);
+            await DbContext.SaveChangesAsync();
         }
 
-        public Task<IEnumerable<TModel>> GetAllAsync()
+        public async Task DeleteAsync(int id)
         {
-            throw new System.NotImplementedException();
+            var result = DbModelContext.Remove(new TModel { Id = id });
+            await DbContext.SaveChangesAsync();
         }
 
-        public Task<TModel> GetByIdAsync()
+        public async Task<IEnumerable<TModel>> GetAllAsync()
         {
-            throw new System.NotImplementedException();
+            var result = await DbModelContext.ToListAsync();
+            return result;
         }
 
-        public Task UpdateAsync(TModel model)
+        public async Task<IEnumerable<TModel>> GetAllAsync(System.Linq.Expressions.Expression<Func<TModel, bool>> expression)
         {
-            throw new System.NotImplementedException();
+            var result = await DbModelContext.Where(expression).ToListAsync();
+            return result;
+        }
+
+        public async Task<TModel> GetByIdAsync(int id)
+        {
+            var result = await DbModelContext.Where(d => d.Id == id).FirstOrDefaultAsync();
+            return result;
+        }
+
+        public async Task UpdateAsync(TModel model)
+        {
+            var result = DbModelContext.Update(model);
+            await DbContext.SaveChangesAsync();
         }
     }
 }
