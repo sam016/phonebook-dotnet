@@ -25,6 +25,8 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
 
         public BaseRepository(DbContext context)
         {
+            Console.WriteLine("\t--Users count in Repo {0}", context.Set<Domain.Models.User>().ToList().Count);
+
             this.DbContext = context ?? throw new ArgumentNullException(nameof(context)); ;
             this.DbModelContext = context.Set<TModel>();
         }

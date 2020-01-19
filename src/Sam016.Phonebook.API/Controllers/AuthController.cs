@@ -1,11 +1,9 @@
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Sam016.Phonebook.API.Models.Commands.Auth;
 using Sam016.Phonebook.API.Models.Queries.Auth;
 using Sam016.Phonebook.API.Models.Requests.Auth;
-using Sam016.Phonebook.API.Models.Requests.User;
 using Sam016.Phonebook.API.Models.Responses.Auth;
 using Sam016.Phonebook.Domain.Dtos;
 using Sam016.Phonebook.Domain.Models;
@@ -29,7 +27,7 @@ namespace Sam016.Phonebook.API.Controllers
         [HttpPost("login")]
         [ProducesResponseType(typeof(LoginResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
-        public async Task<IActionResult> LoginAsync([FromQuery] LoginRequest request)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginRequest request)
         {
             // creating command from request
             var command = MapToCommand<LoginCommand>(request);
