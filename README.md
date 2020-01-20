@@ -51,6 +51,8 @@ Browse to http://localhost:6001
     User: user
     Password: password
 
+![ER Diagram](assets/phonebook-api-erd.png)
+
 ## TODO
 
 1. Request Parameters Validation
