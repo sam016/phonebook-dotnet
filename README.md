@@ -7,17 +7,42 @@ Built using
 4. AutoMapper
 5. JWT Auth
 6. Swagger
-7. Uses the concept of Domain Driven Design
+7. Docker
+8. Uses the concept of Domain Driven Design
 
-## Execute
+## Running the Container
 
 ```bash
 docker-compose up
 ```
 
-## Access API Swagger
+Above mentioned commands starts
+- .NetCore API Service
+-  MySQL DB (seeded by default from `db.sql`)
+
+## Access APIs
+
+### Access Swagger documentation for the APIs
 
 Browse to http://localhost:5000/swagger
+
+### Execute APIs
+
+#### `/api/auth/login`
+
+Login using `john@example.com` and `password`
+
+![Recording Auth](assets/Recording-Auth.gif)
+
+#### `/api/auth/whoami`
+
+Verify the logged in user details
+
+Later, other endpoints can be used smoothly.
+
+`/api/phonebooks` and `api/phonebooks/.../phone-entries` are protected and need authentication.
+
+`/api/users` is open and doesn't need authentication
 
 ## Access Database
 
