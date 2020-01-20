@@ -21,7 +21,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData("name-08", 1)]
         [InlineData("name-09", 1)]
         [InlineData("name-10", 1)]
-        public async Task TestGenericCreateAsync(string name, int userId)
+        public async Task TestGenericCreateAsync(string name, uint userId)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhonebookRepository repo) =>
             {
@@ -58,7 +58,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData(3, "name-3", 1)]
         [InlineData(4, "name-4", 1)]
         [InlineData(5, "name-5", 1)]
-        public async Task TestGenericGetByIdAsync(int id, string name, int userId)
+        public async Task TestGenericGetByIdAsync(uint id, string name, uint userId)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhonebookRepository repo) =>
             {
@@ -75,7 +75,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData(3, "new-name-3", 1)]
         [InlineData(4, "new-name-4", 1)]
         [InlineData(5, "new-name-5", 1)]
-        public async Task TestGenericUpdateAsync(int id, string name, int userId)
+        public async Task TestGenericUpdateAsync(uint id, string name, uint userId)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhonebookRepository repo) =>
             {
@@ -99,7 +99,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public async Task TestGenericDeleteByIdAsync(int id)
+        public async Task TestGenericDeleteByIdAsync(uint id)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhonebookRepository repo) =>
             {

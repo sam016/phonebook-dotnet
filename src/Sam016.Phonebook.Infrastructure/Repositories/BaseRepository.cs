@@ -12,9 +12,9 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
         Task UpdateAsync(TModel model);
         Task<IEnumerable<TModel>> GetAllAsync();
         Task<IEnumerable<TModel>> GetAllAsync(System.Linq.Expressions.Expression<Func<TModel, bool>> expression);
-        Task<TModel> GetByIdAsync(int id);
+        Task<TModel> GetByIdAsync(uint id);
         Task DeleteAsync(TModel model);
-        Task DeleteAsync(int id);
+        Task DeleteAsync(uint id);
         void CopyData(TModel fromEntity, TModel toEntity);
     }
 
@@ -54,7 +54,7 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
             await DbContext.SaveChangesAsync();
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task DeleteAsync(uint id)
         {
             var local = DbContext.Set<TModel>()
                         .Local
@@ -86,7 +86,7 @@ namespace Sam016.Phonebook.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<TModel> GetByIdAsync(int id)
+        public async Task<TModel> GetByIdAsync(uint id)
         {
             var result = await DbModelContext.Where(d => d.Id == id).FirstOrDefaultAsync();
             return result;

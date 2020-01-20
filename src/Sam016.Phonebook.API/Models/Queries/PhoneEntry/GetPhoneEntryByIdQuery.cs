@@ -1,9 +1,8 @@
 namespace Sam016.Phonebook.API.Models.Queries.PhoneEntry
 {
-    public class GetPhoneEntryByIdQuery : BaseQuery, MediatR.IRequest<Sam016.Phonebook.Domain.Models.PhoneEntry>
+    public class GetPhoneEntryByIdQuery : BaseUserQuery, MediatR.IRequest<Sam016.Phonebook.Domain.Models.PhoneEntry>
     {
-        public int Id { get; set; }
-        public int PhonebookId { get; set; }
-        public int UserId { get; set; }
+        public uint Id { get; set; }
+        public uint PhonebookId { get; set; }
     }
 }

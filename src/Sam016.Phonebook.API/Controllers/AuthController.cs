@@ -14,7 +14,8 @@ namespace Sam016.Phonebook.API.Controllers
     [Route("api/auth")]
     public class AuthController : BaseController
     {
-        public AuthController(MediatR.IMediator mediatR, AutoMapper.IMapper mapper) : base(mediatR, mapper)
+        public AuthController(MediatR.IMediator mediatR, AutoMapper.IMapper mapper, IHttpContextAccessor httpContextAccessor)
+            : base(mediatR, mapper, httpContextAccessor)
         {
         }
 

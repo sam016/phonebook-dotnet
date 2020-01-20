@@ -1,9 +1,10 @@
+using PhonebookModel = Sam016.Phonebook.Domain.Models.Phonebook;
+
 namespace Sam016.Phonebook.API.Models.Commands.Phonebook
 {
-    public class UpdatePhonebookCommand : BaseCommand, MediatR.IRequest
-    {
-        public int Id { get; set; }
-        public int UserId { get; set; }
-        public string Name { get; set; }
-    }
+    public class UpdatePhonebookCommand : BaseUserCommand, MediatR.IRequest<PhonebookModel>
+{
+    public uint Id { get; set; }
+    public string Name { get; set; }
+}
 }

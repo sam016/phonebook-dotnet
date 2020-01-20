@@ -33,6 +33,8 @@ services:
         "--default-authentication-plugin=mysql_native_password",
         "--sql_mode=",
       ]
+    volumes:
+      - ./db.sql:/docker-entrypoint-initdb.d/db.sql
     ports:
       - "3306:3306"
     environment:

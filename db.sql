@@ -18,9 +18,11 @@ CREATE TABLE `phone_book` (
   `updated_at` timestamp NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_name` (`user_id`,`name`),
-  CONSTRAINT `phone_book_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+  CONSTRAINT `phone_book_ibfk_3` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `phone_book` (`id`, `user_id`, `name`, `created_at`, `updated_at`) VALUES
+(4,	1,	'Book-4',	'0000-00-00 00:00:00',	'0000-00-00 00:00:00');
 
 DROP TABLE IF EXISTS `phone_entry`;
 CREATE TABLE `phone_entry` (
@@ -53,5 +55,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+INSERT INTO `user` (`id`, `first_name`, `last_name`, `email`, `password`, `created_at`, `updated_at`) VALUES
+(1,	'John',	'Doe',	'john@example.com',	'password',	'0000-00-00 00:00:00',	'0000-00-00 00:00:00');
 
--- 2020-01-18 21:50:29
+-- 2020-01-20 01:01:43

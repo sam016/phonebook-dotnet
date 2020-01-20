@@ -83,7 +83,7 @@ namespace Sam016.Phonebook.API.RequestHandlers
         {
             return Task.FromResult(new AuthProfile()
             {
-                Id = int.Parse(HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value),
+                Id = uint.Parse(HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Name).Value),
                 FirstName = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.GivenName).Value,
                 LastName = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Surname).Value,
                 Email = HttpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value,

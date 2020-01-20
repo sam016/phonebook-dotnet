@@ -20,7 +20,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData("first-08", "last-08", "+91", "9875642308", "org-name-08", "address-08", 1)]
         [InlineData("first-09", "last-09", "+91", "9875642309", "org-name-09", "address-09", 1)]
         [InlineData("first-10", "last-10", "+91", "9875642310", "org-name-10", "address-10", 1)]
-        public async Task TestGenericCreateAsync(string FirstName, string LastName, string Country, string Phone, string OrganizationName, string Address, int PhonebookId)
+        public async Task TestGenericCreateAsync(string FirstName, string LastName, string CountryCode, string Phone, string OrganizationName, string Address, int PhonebookId)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhoneEntryRepository repo) =>
             {
@@ -28,7 +28,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
                 {
                     FirstName = FirstName,
                     LastName = LastName,
-                    Country = Country,
+                    CountryCode = CountryCode,
                     Phone = Phone,
                     OrganizationName = OrganizationName,
                     Address = Address,
@@ -47,11 +47,11 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
                 var users = await repo.GetAllAsync();
 
                 users.Should().BeEquivalentTo(new PhoneEntry[]{
-                new Domain.Models.PhoneEntry{Id=01,FirstName= "first-01",LastName="last-01", Country="+91", Phone="9875642301", OrganizationName="org-name-01", Address="address-01", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=02,FirstName= "first-02",LastName="last-02", Country="+91", Phone="9875642302", OrganizationName="org-name-02", Address="address-02", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=03,FirstName= "first-03",LastName="last-03", Country="+91", Phone="9875642303", OrganizationName="org-name-03", Address="address-03", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=04,FirstName= "first-04",LastName="last-04", Country="+91", Phone="9875642304", OrganizationName="org-name-04", Address="address-04", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=05,FirstName= "first-05",LastName="last-05", Country="+91", Phone="9875642305", OrganizationName="org-name-05", Address="address-05", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=01,FirstName= "first-01",LastName="last-01", CountryCode="+91", Phone="9875642301", OrganizationName="org-name-01", Address="address-01", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=02,FirstName= "first-02",LastName="last-02", CountryCode="+91", Phone="9875642302", OrganizationName="org-name-02", Address="address-02", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=03,FirstName= "first-03",LastName="last-03", CountryCode="+91", Phone="9875642303", OrganizationName="org-name-03", Address="address-03", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=04,FirstName= "first-04",LastName="last-04", CountryCode="+91", Phone="9875642304", OrganizationName="org-name-04", Address="address-04", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=05,FirstName= "first-05",LastName="last-05", CountryCode="+91", Phone="9875642305", OrganizationName="org-name-05", Address="address-05", PhonebookId=1},
                 });
             });
         }
@@ -62,7 +62,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData(03, "first-03", "last-03", "+91", "9875642303", "org-name-03", "address-03", 1)]
         [InlineData(04, "first-04", "last-04", "+91", "9875642304", "org-name-04", "address-04", 1)]
         [InlineData(05, "first-05", "last-05", "+91", "9875642305", "org-name-05", "address-05", 1)]
-        public async Task TestGenericGetByIdAsync(int id, string FirstName, string LastName, string Country, string Phone, string OrganizationName, string Address, int PhonebookId)
+        public async Task TestGenericGetByIdAsync(uint id, string FirstName, string LastName, string CountryCode, string Phone, string OrganizationName, string Address, int PhonebookId)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhoneEntryRepository repo) =>
             {
@@ -70,7 +70,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
 
                 FirstName.Should().Be(FirstName);
                 LastName.Should().Be(LastName);
-                Country.Should().Be(Country);
+                CountryCode.Should().Be(CountryCode);
                 Phone.Should().Be(Phone);
                 OrganizationName.Should().Be(OrganizationName);
                 Address.Should().Be(Address);
@@ -84,7 +84,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData(03, "new-first-03", "new-last-03", "+1", "7875642303", "new-org-name-03", "new-address-03", 1)]
         [InlineData(04, "new-first-04", "new-last-04", "+1", "7875642304", "new-org-name-04", "new-address-04", 1)]
         [InlineData(05, "new-first-05", "new-last-05", "+1", "7875642305", "new-org-name-05", "new-address-05", 1)]
-        public async Task TestGenericUpdateAsync(int id, string FirstName, string LastName, string Country, string Phone, string OrganizationName, string Address, int PhonebookId)
+        public async Task TestGenericUpdateAsync(uint id, string FirstName, string LastName, string CountryCode, string Phone, string OrganizationName, string Address, int PhonebookId)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhoneEntryRepository repo) =>
             {
@@ -93,7 +93,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
                     Id = id,
                     FirstName = FirstName,
                     LastName = LastName,
-                    Country = Country,
+                    CountryCode = CountryCode,
                     Phone = Phone,
                     OrganizationName = OrganizationName,
                     Address = Address,
@@ -104,7 +104,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
 
                 updatedPhoneEntry.FirstName.Should().Be(FirstName);
                 updatedPhoneEntry.LastName.Should().Be(LastName);
-                updatedPhoneEntry.Country.Should().Be(Country);
+                updatedPhoneEntry.CountryCode.Should().Be(CountryCode);
                 updatedPhoneEntry.Phone.Should().Be(Phone);
                 updatedPhoneEntry.OrganizationName.Should().Be(OrganizationName);
                 updatedPhoneEntry.Address.Should().Be(Address);
@@ -118,7 +118,7 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
         [InlineData(3)]
         [InlineData(4)]
         [InlineData(5)]
-        public async Task TestGenericDeleteByIdAsync(int id)
+        public async Task TestGenericDeleteByIdAsync(uint id)
         {
             await ExecuteInRepositoryAsync(async (DbContext context, PhoneEntryRepository repo) =>
             {

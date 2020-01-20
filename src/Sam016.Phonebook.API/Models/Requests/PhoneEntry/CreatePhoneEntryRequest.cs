@@ -8,6 +8,8 @@ namespace Sam016.Phonebook.API.Models.Requests.PhoneEntry
         public string LastName { get; set; }
         public string OrganizationName { get; set; }
         public string Address { get; set; }
-        public DateTime Birthday { get; set; }
+        public string CountryCode { get; set; }
+        public string Phone { get; set; }
+        // public DateTime Birthday { get; set; }
     }
 }

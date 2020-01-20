@@ -73,7 +73,7 @@ namespace Sam016.Phonebook.Infrastructure
             {
                 entity.ToTable("phone_entry");
 
-                entity.HasIndex(e => new { e.PhonebookId, e.Country, e.Phone })
+                entity.HasIndex(e => new { e.PhonebookId, e.CountryCode, e.Phone })
                     .HasName("phonebook_country_phone")
                     .IsUnique();
 
@@ -88,7 +88,7 @@ namespace Sam016.Phonebook.Infrastructure
                     .HasCharSet("utf8mb4")
                     .HasCollation("utf8mb4_unicode_ci");
 
-                entity.Property(e => e.Country)
+                entity.Property(e => e.CountryCode)
                     .IsRequired()
                     .HasColumnName("country")
                     .HasColumnType("varchar(10)")

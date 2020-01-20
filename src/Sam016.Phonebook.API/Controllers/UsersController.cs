@@ -14,7 +14,8 @@ namespace Sam016.Phonebook.API.Controllers
     [Route("api/users")]
     public class UserController : BaseController
     {
-        public UserController(MediatR.IMediator mediatR, AutoMapper.IMapper mapper) : base(mediatR, mapper)
+        public UserController(MediatR.IMediator mediatR, AutoMapper.IMapper mapper, IHttpContextAccessor httpContextAccessor)
+            : base(mediatR, mapper, httpContextAccessor)
         {
         }
 
@@ -50,7 +51,7 @@ namespace Sam016.Phonebook.API.Controllers
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(GetUserByIdResponse), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetByIdAsync([FromRoute, BindRequired] int id)
+        public async Task<IActionResult> GetByIdAsync([FromRoute, BindRequired] uint id)
         {
             // creating query from request
             var query = MapToQuery<GetUserByIdQuery>(id);

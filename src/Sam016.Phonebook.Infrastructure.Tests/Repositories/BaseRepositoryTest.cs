@@ -46,11 +46,11 @@ namespace Sam016.Phonebook.Infrastructure.Tests.Repositories
             });
 
             await context.AddRangeAsync(new Domain.Models.PhoneEntry[]{
-                new Domain.Models.PhoneEntry{Id=01,FirstName= "first-01",LastName="last-01", Country="+91", Phone="9875642301", OrganizationName="org-name-01", Address="address-01", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=02,FirstName= "first-02",LastName="last-02", Country="+91", Phone="9875642302", OrganizationName="org-name-02", Address="address-02", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=03,FirstName= "first-03",LastName="last-03", Country="+91", Phone="9875642303", OrganizationName="org-name-03", Address="address-03", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=04,FirstName= "first-04",LastName="last-04", Country="+91", Phone="9875642304", OrganizationName="org-name-04", Address="address-04", PhonebookId=1},
-                new Domain.Models.PhoneEntry{Id=05,FirstName= "first-05",LastName="last-05", Country="+91", Phone="9875642305", OrganizationName="org-name-05", Address="address-05", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=01,FirstName= "first-01",LastName="last-01", CountryCode="+91", Phone="9875642301", OrganizationName="org-name-01", Address="address-01", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=02,FirstName= "first-02",LastName="last-02", CountryCode="+91", Phone="9875642302", OrganizationName="org-name-02", Address="address-02", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=03,FirstName= "first-03",LastName="last-03", CountryCode="+91", Phone="9875642303", OrganizationName="org-name-03", Address="address-03", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=04,FirstName= "first-04",LastName="last-04", CountryCode="+91", Phone="9875642304", OrganizationName="org-name-04", Address="address-04", PhonebookId=1},
+                new Domain.Models.PhoneEntry{Id=05,FirstName= "first-05",LastName="last-05", CountryCode="+91", Phone="9875642305", OrganizationName="org-name-05", Address="address-05", PhonebookId=1},
             });
 
             await context.SaveChangesAsync();
