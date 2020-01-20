@@ -8,7 +8,7 @@ Built using
 5. JWT Auth
 6. Swagger
 7. Docker
-8. Uses the concept of Domain Driven Design
+8. Uses the concepts of DDD (Domain Driven Design) and SOLID
 
 ## Running the Container
 
@@ -50,3 +50,12 @@ Browse to http://localhost:6001
 
     User: user
     Password: password
+
+## TODO
+
+1. Request Parameters Validation
+2. Renew Token
+3. Block Token (logout)
+4. Pagination
+5. Exception Handling
+6. Logging
